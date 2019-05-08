@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:reg="http://www.dangdang.com/schema/ddframe/reg"
+       xmlns:job="http://www.dangdang.com/schema/ddframe/job"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd 
+                        http://www.dangdang.com/schema/ddframe/reg 
+                        http://www.dangdang.com/schema/ddframe/reg/reg.xsd 
+                        http://www.dangdang.com/schema/ddframe/job 
+                        http://www.dangdang.com/schema/ddframe/job/job.xsd 
+                        ">
+       <!--配置作业注册中心 -->
+       <reg:zookeeper id="regCenter" server-lists="100.106.41.1:2181" namespace="dmp-example-job" base-sleep-time-milliseconds="1000" max-sleep-time-milliseconds="3000" max-retries="3" />
+
+       <!-- 配置简单作业-->
+        <job:simple id="MinorActiveUserPushTask" class="com.jdb.dmp.task.push.MinorActiveUserPushTask" registry-center-ref="regCenter" cron="* */1 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />
+       <!--<job:simple id="currentDateNewUserPushTask" class="com.jdb.dmp.task.push.CurrentDateNewUserPushTask" registry-center-ref="regCenter" cron="0 0 20 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+       <!--<job:simple id="sevenDaysNewUserPushTask" class="com.jdb.dmp.task.push.SevenDaysNewUserPushTask" registry-center-ref="regCenter" cron="0 0 20 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+       <!--<job:simple id="thirtyDaysNewUserPushTask" class="com.jdb.dmp.task.push.ThirtyDaysNewUserPushTask" registry-center-ref="regCenter" cron="0 0 18 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+
+        <!--配置同步用户任务-->
+       <!--<job:simple id="syncUserJob" class="com.jdb.dmp.task.sync.SyncUserTask" registry-center-ref="regCenter" cron="10 10 */2 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+
+        <!--配置同步粉丝任务-->
+       <!--<job:simple id="syncFriendJob" class="com.jdb.dmp.task.sync.SyncFriendTask" registry-center-ref="regCenter" cron="0 */2 * * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+
+        <!--配置同步还款流水任务-->
+       <!--<job:simple id="syncRepayFlowJob" class="com.jdb.dmp.task.sync.SyncRepayFlowTask" registry-center-ref="regCenter" cron="10 10 7,11,15,1 9 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+
+        <!--配置同步虚拟标还款流水任务-->
+       <!--<job:simple id="syncVirtualRepayFlowJob" class="com.jdb.dmp.task.sync.SyncVirtualRepayFlowTask" registry-center-ref="regCenter" cron="10 10 */2 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+
+        <!--配置同步借钱买理财用户标的表任务-->
+       <!--<job:simple id="syncBorrowBuyLicaiProductTask" class="com.jdb.dmp.task.sync.SyncBorrowBuyLicaiProductTask" registry-center-ref="regCenter" cron="10 10 */2 * * ?" sharding-total-count="1" sharding-item-parameters="0=A" />-->
+
+    <!--&lt;!&ndash; 配置数据流作业&ndash;&gt;-->
+       <!--<job:dataflow id="throughputDataflow" class="xxx.MyThroughputDataflowElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C" />-->
+
+       <!--&lt;!&ndash; 配置脚本作业&ndash;&gt;-->
+       <!--<job:script id="scriptElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C" script-command-line="/your/file/path/demo.sh" />-->
+
+       <!--&lt;!&ndash; 配置带监听的简单作业&ndash;&gt;-->
+       <!--<job:simple id="listenerElasticJob" class="xxx.MySimpleListenerElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"   sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C">-->
+              <!--<job:listener class="xx.MySimpleJobListener"/>-->
+              <!--<job:distributed-listener class="xx.MyOnceSimpleJobListener" started-timeout-milliseconds="1000" completed-timeout-milliseconds="2000" />-->
+       <!--</job:simple>-->
+
+       <!--&lt;!&ndash; 配置带数据库和日志作业事件监听的简单作业&ndash;&gt;-->
+       <!--<job:simple id="listenerElasticJob" class="xxx.MySimpleListenerElasticJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"   sharding-total-count="3" sharding-item-parameters="0=A,1=B,2=C">-->
+              <!--<job:event-log />-->
+              <!--<job:event-rdb driver="org.h2.Driver" url="jdbc:h2:mem:job_event_bus" username="sa" password=""  log-level="INFO" />-->
+       <!--</job:simple>-->
+</beans>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}dmp.log}"/>
+    <property name="PUSH_HISTORY_FILE" value="{yyyyMMdd}"/>
+    <!--<include resource="org/springframework/boot/logging/logback/file-appender.xml" />-->
+    <property name="LOG_HOME" value="$LOG_PATH"/>
+    <appender name="LOG_STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">-->
+        <!--<fileNamePattern>${LOG_FILE}.%i</fileNamePattern>-->
+        <!--</rollingPolicy>-->
+        <!--<triggeringPolicy-->
+        <!--class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+        <!--<MaxFileSize>1MB</MaxFileSize>-->
+        <!--</triggeringPolicy>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/dmp.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="CURRENTNEW" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_current_new.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="SEVENDAYS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_seven_days.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="THIRTYDAYS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_thirty_days.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="MINORACTIVE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_minor_active.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SILENT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_silent.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="NEARSILENT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_near_silent.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="LOSS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_loss.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="NEARLOSS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/push_near_loss.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="PUSHSENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/%d{yyyyMMdd}</FileNamePattern>
+            <maxHistory>3000</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    <logger name="com.jdb.dmp.dao" level="DEBUG" addtivity="false">
+        <appender-ref ref="LOG_STASH"/>
+    </logger>
+    <logger name="com.jdb.dmp.task.push.CurrentNewUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="CURRENTNEW" />
+    </logger>
+    <logger name="com.jdb.dmp.task.push.SevenNewUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="SEVENDAYS" />
+    </logger>
+    <logger name="com.jdb.dmp.task.push.ThirtyNewUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="THIRTYDAYS" />
+    </logger>
+
+    <logger name="com.jdb.dmp.task.push.MinorActiveUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="MINORACTIVE"/>
+    </logger>
+    <logger name="com.jdb.dmp.task.push.SilentUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="SILENT"/>
+    </logger>
+    <logger name="com.jdb.dmp.task.push.NearSilentUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="NEARSILENT" />
+    </logger>
+    <logger name="com.jdb.dmp.task.push.LossUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="LOSS" />
+    </logger>
+    <logger name="com.jdb.dmp.task.push.NearLossUserPushTask" level="INFO" addtivity="false">
+        <appender-ref ref="NEARLOSS" />
+    </logger>
+    <logger name="com.jdb.dmp.util.PushUtil" level="INFO" addtivity="false">
+        <appender-ref ref="PUSHSENDER"/>
+    </logger>
+
+</configuration>
